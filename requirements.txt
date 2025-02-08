@@ -1,0 +1,7 @@
+httpx
+tenacity
+pydantic
+pydantic-settings
+loguru
+PyYaML
+pytest
