@@ -1,4 +1,3 @@
-import logging
 from functools import cached_property
 from typing import Optional
 
@@ -9,8 +8,6 @@ from pydantic_settings import BaseSettings
 from tenacity import (
     RetryError,
     Retrying,
-    after_log,
-    before_log,
     retry_if_exception_type,
     stop_after_attempt,
     wait_exponential,
@@ -38,8 +35,6 @@ class HTTPClient:
                 stop=stop_after_attempt(self.max_retries),
                 wait=wait_exponential(multiplier=1, min=1, max=10),
                 retry=retry_if_exception_type(httpx.TimeoutException),
-                before=before_log(logger, logging.DEBUG),
-                after=after_log(logger, logging.DEBUG),
             ):
                 with attempt:
                     response = self.client.send(
@@ -100,19 +95,30 @@ class GitHubAdapter:
     def list_teams(self, org: str):
         return self.http_client.get(f"/orgs/{org}/teams")
 
-    def list_team_members(self, org: str, team_slug: str):
+    def list_team_memberships(self, org: str, team_slug: str):
         return self.http_client.get(f"/orgs/{org}/teams/{team_slug}/members")
 
-    def add_team_member(self, org: str, team_slug: str, username: str, role: str):
+    def add_team_membership(self, org: str, team_slug: str, username: str, role: Optional[str] = "member"):
         return self.http_client.put(f"/orgs/{org}/teams/{team_slug}/memberships/{username}", json={"role": role})
 
-    def add_team(self, org: str, name: str, description: str, privacy: str, notification: str):
+    def add_team(
+        self,
+        org: str,
+        name: str,
+        description: Optional[str] = "",
+        privacy: Optional[str] = "closed",
+        repo_names: Optional[list[str]] = None,
+    ):
+        body = {"name": name, "description": description, "privacy": privacy}
+        if repo_names:
+            body["repo_names"] = repo_names
+
         return self.http_client.post(
             f"/orgs/{org}/teams",
-            json={"name": name, "description": description, "privacy": privacy, "notification": notification},
+            json=body,
         )
 
-    def remove_team_member(self, org: str, team_slug: str, username: str):
+    def remove_team_membership(self, org: str, team_slug: str, username: str):
         return self.http_client.delete(f"/orgs/{org}/teams/{team_slug}/memberships/{username}")
 
     def remove_team(self, org: str, team_slug: str):

@@ -1,5 +1,6 @@
 httpx
 tenacity
+typer
 pydantic
 pydantic-settings
 loguru
