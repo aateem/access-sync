@@ -92,11 +92,24 @@ class GitHubAdapter:
             },
         )
 
+    def list_memberships(self, org: str):
+        return self.http_client.get(f"/orgs/{org}/members")
+
     def list_teams(self, org: str):
         return self.http_client.get(f"/orgs/{org}/teams")
 
     def list_team_memberships(self, org: str, team_slug: str):
         return self.http_client.get(f"/orgs/{org}/teams/{team_slug}/members")
+
+    def list_team_repositories(self, org: str, team_slug: str):
+        return self.http_client.get(f"/orgs/{org}/teams/{team_slug}/repos")
+
+    def add_team_repository_permissions(
+        self, org: str, team_slug: str, repo: str, owner: str, permission: Optional[str] = "pull"
+    ):
+        return self.http_client.put(
+            f"/orgs/{org}/teams/{team_slug}/repos/{owner}/{repo}", json={"permission": permission}
+        )
 
     def add_team_membership(self, org: str, team_slug: str, username: str, role: Optional[str] = "member"):
         return self.http_client.put(f"/orgs/{org}/teams/{team_slug}/memberships/{username}", json={"role": role})

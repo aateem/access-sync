@@ -1,11 +1,13 @@
 import inspect
 from functools import wraps
+from pathlib import Path
 from typing import Any
 
 from rich import print as rich_print
 from typer import Typer
 
 from main import GitHubAdapter
+from manifest import GitHubManifest
 
 cli = Typer()
 gh = Typer()
@@ -29,6 +31,13 @@ def register_subcommands(cmd: Typer, source_obj: Any):
 
 
 register_subcommands(gh, gh_adapter)
+
+
+@gh.command("apply-manifest")
+def apply_manifest(path: Path):
+    manifest = GitHubManifest(path)
+    rich_print(manifest.manifest().model_dump(mode="json"))
+
 
 cli.add_typer(gh, name="gh")
 
