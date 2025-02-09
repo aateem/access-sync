@@ -1,6 +1,6 @@
-from typing import List, Literal
+from typing import List, Literal, Optional
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 class Member(BaseModel):
@@ -16,9 +16,10 @@ class Repo(BaseModel):
 
 
 class Team(BaseModel):
-    members: List[Member]
-    repos: List[Repo]
+    members: Optional[List[Member]] = Field(default_factory=list)
+    repos: Optional[List[Repo]] = Field(default_factory=list)
     name: str
+    remove: bool = False
 
 
 class Organization(BaseModel):

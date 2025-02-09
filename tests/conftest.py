@@ -3,7 +3,11 @@ from loguru import logger
 
 from access_manager.adapter import GitHubAdapter
 
+# the following are values from the existing GH test org
 ORG = "aateem-org"
+USER_LOGIN_A = "aateem"
+USER_LOGIN_B = "reluctant-participant"
+REPO_A = "test"
 
 
 @pytest.fixture

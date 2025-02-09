@@ -41,6 +41,11 @@ class GitHubManifest(Manifest):
             self.local[org.name] = {team["name"]: team for team in self.adapter.list_teams(org.name)}
 
             for team in org.teams:
+                if team.remove and team.name in self.local[org.name]:
+                    logger.info(f"Removing team {team.name}")
+                    self.adapter.remove_team(org.name, self.local[org.name][team.name]["slug"])
+                    continue
+
                 if team.name not in self.local[org.name]:
                     logger.info(f"Adding new team {team.name}")
                     new_team = self.adapter.add_team(org.name, team.name)
