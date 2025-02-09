@@ -1,3 +1,4 @@
+from abc import ABC
 from functools import cached_property
 from typing import Optional
 
@@ -8,6 +9,14 @@ from access_manager.client import HTTPClient
 
 class Settings(BaseSettings):
     bearer_token: str
+
+
+class Adapter(ABC):
+    settings: BaseSettings
+    http_client: HTTPClient
+
+    # NOTE: for the extension to, say Jira project/team management, the operations set
+    # should be unified; this is the improvement for the future
 
 
 class GitHubAdapter:

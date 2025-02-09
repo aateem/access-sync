@@ -1,43 +1,39 @@
-from typing import Any, List, Literal
+from abc import ABC, abstractmethod
+from functools import cached_property
+from typing import Any
 
 from loguru import logger
 from pydantic import BaseModel
 
-from access_manager.adapter import GitHubAdapter
+from access_manager.adapter import Adapter, GitHubAdapter
+from access_manager.models import github
 
 
-class Member(BaseModel):
-    login: str
-    role: Literal["member", "maintainer"] = "member"
-    remove: bool = False
+class Manifest(ABC):
+    validator: BaseModel
+    adapter: Adapter
+
+    def __init__(self, manifest_data: Any):
+        self.manifest = self.validator.model_validate(manifest_data)
+
+    @abstractmethod
+    def apply(self):
+        # TODO: this is a template for future integrations (JIra, etc.)
+        # the current vision is that the apply's logic might be to diverse to
+        # be implemented in the base class
+        raise NotImplementedError
 
 
-class Repo(BaseModel):
-    name: str
-    owner: str
-    permission: Literal["pull", "triage", "push", "maintain", "admin"] = "pull"
+class GitHubManifest(Manifest):
+    validator = github.Organizations
 
-
-class Team(BaseModel):
-    members: List[Member]
-    repos: List[Repo]
-    name: str
-
-
-class Organization(BaseModel):
-    name: str
-    teams: List[Team]
-
-
-class Organizations(BaseModel):
-    organizations: List[Organization]
-
-
-class GitHubManifest:
-    def __init__(self, manifest_data: Any, github_adapter: GitHubAdapter):
-        self.manifest = Organizations.model_validate(manifest_data)
-        self.adapter = github_adapter
+    def __init__(self, manifest_data: Any):
+        super().__init__(manifest_data)
         self.local = {}
+
+    @cached_property
+    def adapter(self) -> GitHubAdapter:
+        return GitHubAdapter()
 
     def apply(self):
         logger.info("Applying manifest")
