@@ -29,6 +29,6 @@ jobs:
         pip install ".[test]"
     - name: Test with pytest
       env: 
-        BEARER_TOKEN: ${{ secrets.BEARER_TOKEN }}
+        BEARER_TOKEN: "${{ secrets.BEARER_TOKEN }}"
       run: |
         pytest
