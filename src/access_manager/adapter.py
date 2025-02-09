@@ -40,8 +40,8 @@ class GitHubAdapter:
     def list_teams(self, org: str):
         return self.http_client.get(f"/orgs/{org}/teams")
 
-    def list_team_memberships(self, org: str, team_slug: str):
-        return self.http_client.get(f"/orgs/{org}/teams/{team_slug}/members")
+    def list_team_memberships(self, org: str, team_slug: str, role: Optional[str] = "all"):
+        return self.http_client.get(f"/orgs/{org}/teams/{team_slug}/members", params={"role": role})
 
     def list_team_repositories(self, org: str, team_slug: str):
         return self.http_client.get(f"/orgs/{org}/teams/{team_slug}/repos")

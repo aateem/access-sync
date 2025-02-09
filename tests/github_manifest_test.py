@@ -27,6 +27,11 @@ organizations:
     assert len(teams) == 1
     assert teams[0]["name"] == "test-team-one"
 
+    # check the added team member has the required role
+    members = gh_adapter.list_team_memberships("aateem-org", teams[0]["slug"], role="member")
+    assert len(members) == 1
+    assert members[0]["login"] == "reluctant-participant"
+
     # check team repositories
     repos = gh_adapter.list_team_repositories("aateem-org", teams[0]["slug"])
     assert len(repos) == 1
