@@ -1,0 +1,19 @@
+[project]
+name = "access-manager"
+version = "0.0.1"
+dependencies = [
+    "httpx",
+    "tenacity",
+    "typer",
+    "pydantic",
+    "pydantic-settings",
+    "loguru",
+    "PyYAML",
+]
+requires-python = ">= 3.12"
+
+[project.optional-dependencies]
+test = ["pytest"]
+
+[project.scripts]
+am = "access_manager.cli:cli"

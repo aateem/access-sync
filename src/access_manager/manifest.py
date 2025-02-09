@@ -3,7 +3,7 @@ from typing import Any, List, Literal
 from loguru import logger
 from pydantic import BaseModel
 
-from main import GitHubAdapter
+from access_manager.adapter import GitHubAdapter
 
 
 class Member(BaseModel):

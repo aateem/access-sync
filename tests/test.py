@@ -1,7 +1,7 @@
 import pytest
 from loguru import logger
 
-from main import GitHubAdapter
+from access_manager.adapter import GitHubAdapter
 
 ORG = "aateem-org"
 

@@ -9,8 +9,8 @@ from loguru import logger
 from rich import print as rich_print
 from typer import Typer
 
-from main import GitHubAdapter
-from manifest import GitHubManifest
+from access_manager.adapter import GitHubAdapter
+from access_manager.manifest import GitHubManifest
 
 cli = Typer()
 gh = Typer()
@@ -49,7 +49,7 @@ cli.add_typer(gh, name="gh")
 
 @cli.callback()
 def configure(log_level: str = "INFO"):
-    # remove the default configuration
+    # remove the default logger configuration
     logger.remove()
 
     logger.add(sys.stderr, level=log_level)
