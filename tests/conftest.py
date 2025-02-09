@@ -8,6 +8,7 @@ ORG = "aateem-org"
 USER_LOGIN_A = "aateem"
 USER_LOGIN_B = "reluctant-participant"
 REPO_A = "test"
+REPO_B = "reluctant_test"
 
 
 @pytest.fixture

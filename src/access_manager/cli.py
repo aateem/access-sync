@@ -27,6 +27,8 @@ def report_result(func):
     return wrapper
 
 
+# NOTE: this is a quick way to auto-register subcommands
+# though now one needs to be careful not expose "private" methods
 def register_subcommands(cmd: Typer, source_obj: Any):
     for name, func in inspect.getmembers(source_obj, predicate=inspect.ismethod):
         if not name.startswith("_"):
