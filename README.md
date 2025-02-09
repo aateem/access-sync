@@ -23,6 +23,10 @@ pip install ".[test]"
 ```
 
 ## Usage
+
+Requires GitHub Access Token provided as `BEARER_TOKEN` env var.
+
+### As CLI
 ```bash
 am --help
 ```
@@ -45,6 +49,20 @@ organizations:
 Aply via:
 ```bash
 am gh apply-manifest <path to the file above>
+```
+
+### As a lib
+```python
+from access_manager.adapter import GitHubAdapter
+adapter = GitHubAdapter()
+    teams = adapter.list_teams('some-org')
+    for team in teams:
+        logger.info(f"Removing team {team['slug']}")
+        adapter.remove_team('some-org', team["slug"])
+
+from access_manager.manifest import GitHubManifest
+manifest = GitHubManifest(yaml.safe_load(manifest_content))
+manifest.apply()
 ```
 
 ## Architecture
