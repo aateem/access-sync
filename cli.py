@@ -1,8 +1,11 @@
 import inspect
+import sys
 from functools import wraps
 from pathlib import Path
 from typing import Any
 
+import yaml
+from loguru import logger
 from rich import print as rich_print
 from typer import Typer
 
@@ -35,11 +38,22 @@ register_subcommands(gh, gh_adapter)
 
 @gh.command("apply-manifest")
 def apply_manifest(path: Path):
-    manifest = GitHubManifest(path)
-    rich_print(manifest.manifest().model_dump(mode="json"))
+    with open(path) as f:
+        data = yaml.safe_load(f.read())
+    manifest = GitHubManifest(manifest_data=data, github_adapter=gh_adapter)
+    manifest.apply()
 
 
 cli.add_typer(gh, name="gh")
+
+
+@cli.callback()
+def configure(log_level: str = "INFO"):
+    # remove the default configuration
+    logger.remove()
+
+    logger.add(sys.stderr, level=log_level)
+
 
 if __name__ == "__main__":
     cli()
