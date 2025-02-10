@@ -1,4 +1,5 @@
 [![Run functional tests](https://github.com/aateem/access-sync/actions/workflows/python-app.yml/badge.svg?branch=main)](https://github.com/aateem/access-sync/actions/workflows/python-app.yml)
+[![Docker Image build](https://github.com/aateem/access-sync/actions/workflows/docker-image.yml/badge.svg)](https://github.com/aateem/access-sync/actions/workflows/docker-image.yml)
 
 # Access Manager
 
@@ -15,11 +16,17 @@ The project provides cli interface for both "fine grained" resource management a
 - Python >= 3.12
 
 ### Setup
+Install as a Python package
 ```bash
 python -m venv venv
 pip install -U pip
 pip install .
 pip install ".[test]"
+```
+
+Build docker image
+```bash
+docker build access-manager-cli .
 ```
 
 ## Usage
