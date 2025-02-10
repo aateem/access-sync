@@ -1,6 +1,7 @@
-name: Docker Image CI
+name: Docker Image build
 
 on:
+  workflow_dispatch: # Enables manual triggering
   push:
     branches: [ "main" ]
   pull_request:
@@ -15,4 +16,4 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
+      run: docker build . --file Dockerfile --tag access-manager-cli:$(date +%s)
