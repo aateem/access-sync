@@ -4,12 +4,13 @@
 name: Run functional tests
 
 on:
-  schedule: 
-    - cron: "0 * * * *"
+  # schedule: 
+  #   - cron: "0 * * * *"
   workflow_dispatch: # Enables manual triggering
   push:
-    branches:
-      - main
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
 
 permissions:
   contents: read
